@@ -3,13 +3,18 @@ import {
   evaluate, format
 } from 'mathjs'
 
+
 export default {
   data () {
     return {
       title: 'Ratio Calc',
-      ratio: 2,
-      start: 0,
-      count: 100
+      rform: {
+        ratio: 2,
+        start: 0,
+        count: 100,
+        ratioCalc: 3
+      }
+
     }
   },
 
@@ -17,12 +22,19 @@ export default {
     results () {
       const r = []
       let c = 0
-      const { start } = this
-      for (let i = 0; i < this.count; i++) {
+      const { start, ratio, count, ratioCalc } = this.rform
+      for (let i = 0; i < count; i++) {
         const n = Number(start || 0) + i
-        const s = n + ' * ' + String(this.ratio || 1)
-        c = format(evaluate(s), { precision: 14 })
-        r.push({ n, c })
+        const s = n + ' * ' + String(ratio || 1)
+        const increments = []
+        const c = format(evaluate(s), { precision: 8 })
+        const ii = (c) => format(evaluate(`${c} * ${ratio}`), { precision: 8 })
+        let x = c
+        for (let j = 0; j < ratioCalc; j++) {
+          x = ii(x)
+          increments.push(x)
+        }
+        r.push({ n, c, increments })
       }
       return r
     }
@@ -39,17 +51,9 @@ main
   section
     form()
 
-      span.field
-        label(for="start") Start
-        input(type="text" v-model="start" id="start")
-
-      span.field
-        label(for="ratio") Ratio
-        input(type="text" v-model="ratio" id="ratio")
-
-      span.field
-        label(for="count") Count
-        input(type="text" v-model="count" id="count")
+      span.field(v-for="field, key in rform")
+        label(:for="field") {{ key }}
+        input(type="text" v-model="rform[key]" :id="field")
 
   section
     h2 Results
@@ -57,8 +61,9 @@ main
         li(v-for="result of results")
           span.bar
           span.i {{ result.n  }}
-          span.r x {{ ratio }}
           span.c {{ result.c  }}
+          span.inc
+            span.c(v-for="inc of result.increments") {{ inc }}
 
 footer
   p &copy snaz4d kkthxbye
@@ -101,11 +106,15 @@ li {
 li span {
   min-width: 80px;
 }
-
-.c {
-  margin-left: auto;
+.inc {
+  display: flex;
+  flex-flow: row nowrap;
+}
+span.c {
+  margin-left: 10px;
   font-weight: bold;
   text-align: right;
+  width: 100px;
 }
 
 .r {
