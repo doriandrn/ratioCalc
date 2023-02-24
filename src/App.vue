@@ -17,10 +17,12 @@ export default {
     results () {
       const r = []
       let c = 0
-      for (let i = this.start; i <= this.count; i++) {
-        const s = '' + i + '*' + String(this.ratio)
+      const { start } = this
+      for (let i = 0; i < this.count; i++) {
+        const n = Number(start || 0) + i
+        const s = n + ' * ' + String(this.ratio || 1)
         c = format(evaluate(s), { precision: 14 })
-        r.push({ i, c })
+        r.push({ n, c })
       }
       return r
     }
@@ -53,7 +55,8 @@ main
     h2 Results
       ul.results
         li(v-for="result of results")
-          span.i {{ result.i  }}
+          span.bar
+          span.i {{ result.n  }}
           span.r x {{ ratio }}
           span.c {{ result.c  }}
 
@@ -83,10 +86,16 @@ li {
   font-size: 12px;
   display: flex;
   flex-flow: row nowrap;
+  border-bottom: 1px solid #777;
+  position: relative;
 }
 
-li:nth-child(2n) {
-  background-color: #fafafa;
+.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 li span {
