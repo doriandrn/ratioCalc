@@ -1,12 +1,10 @@
 <template lang="pug">
-header
-  h1 {{ title }}
-
 main
   section
+    h1 {{ title }}
     form
       span.field(v-for="field, key in rform" :class="key")
-        label(:for="field") {{ key }}
+        label(:for="field") {{ label(key) }}
         input(type="number" v-model="rform[key]" :id="field")
 
   section.results
@@ -50,15 +48,13 @@ ChartJS.register(Tooltip, Colors, CategoryScale, LinearScale, RadialLinearScale,
 export default {
   data () {
     return {
-      title: 'Ratio Visualizer',
+      title: 'Ratio View',
       rform: {
         ratio: 1.61803398875,
         startingNumber: 33,
         displayResults: 7,
         showNextNumbers: 1
-      },
-      chartTypes: ['line', 'bar', 'pie', 'bubble', 'doughnut', 'radar', 'scatter', 'polarArea'],
-      chartType: 'bar'
+      }
     }
   },
 
@@ -73,9 +69,27 @@ export default {
     Scatter
   },
 
-  watch: {
-    results: (a, b, el) => console.log('cc', a, b, el)
+  methods: {
+    label (s) {
+      switch (s) {
+        case 'ratio':
+          return 'Ratio'
+
+        case 'startingNumber':
+          return 'Start'
+
+        case 'displayResults':
+          return 'Results'
+
+        case 'showNextNumbers':
+          return 'Increment'
+      }
+    }
   },
+
+  // watch: {
+  //   results: (a, b, el) => console.log('cc', a, b, el)
+  // },
 
   computed: {
     results () {
@@ -141,15 +155,15 @@ main
 
 label
   display block
+  font-weight 500
 
 input
 select
-  background-color black
+  background-color transparent
   border 0
   outline 0
-  padding 8px
-  font-size 16px
-  color #ccc
+  padding 8px 0
+  font-size 24px
   border-radius 2px
   width 100%
 
@@ -160,10 +174,9 @@ h1
   font-weight bold
   font-size 32px
   line-height 36px
+  margin-bottom 32px
 
-.ratio
-  input
-    font-weight bold
+
 
 
 canvas
@@ -180,7 +193,13 @@ form
 
 .field
   display block
-  flex 1 1 auto
+  flex 1 1 30%
+
+  &.ratio
+    flex 1 1 100%
+
+    input
+      font-weight bold
 
   &:not(:last-child)
     margin-bottom 12px
