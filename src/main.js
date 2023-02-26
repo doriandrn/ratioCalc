@@ -6,6 +6,6 @@ import './assets/main.styl'
 
 const app = createApp(App)
 
-app.use(createPinia())
+// app.use(createPinia())
 
 app.mount('#app')

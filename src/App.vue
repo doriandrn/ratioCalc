@@ -5,7 +5,7 @@ main
     form
       span.field(v-for="field, key in rform" :class="key")
         label(:for="field") {{ label(key) }}
-        input(type="number" v-model="rform[key]" :id="field")
+        input(type="number" v-model="rform[key]" :id="field" :step="key === 'ratio' ? 0.01 : 1")
 
   section.results
     ul
@@ -46,6 +46,9 @@ import { Bar, Line, Pie, Doughnut, Bubble, PolarArea, Radar, Scatter } from 'vue
 ChartJS.register(Tooltip, Colors, CategoryScale, LinearScale, RadialLinearScale, BarElement, PointElement, LineElement, ArcElement)
 
 export default {
+  title () {
+    return 'Ratio View'
+  },
   data () {
     return {
       title: 'Ratio View',
@@ -243,4 +246,6 @@ li
 .results
   flex 1 1 70%
 
+.showNextNumbers
+  display none
 </style>

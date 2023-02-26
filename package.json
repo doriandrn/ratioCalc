@@ -1,6 +1,6 @@
 {
-  "name": "ratiocalc",
-  "version": "0.0.0",
+  "name": "ratioview",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
